@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+html lang="en"
+    head
+        meta charset="UTF-8"/
+        meta name="viewport" content="width=device-width, initial-scale=1.0"/
+        meta http-equiv="X-UA-Compatible" content="ie=edge"/
+        link href="public/main.css" rel="stylesheet" type="text/css"
+        title Webbsidan
+    body
+        header
+            a href="/" Webbshoppen
+        div id="top_bar"
+            a class="text1" Logga in
+            form class="formclass" action="/inlogg_submit" method="POST"
+                input type="text" name="usr_name" placeholder="Username"
+                input type="text" name="usr_pass" placeholder="Password"
+            a class="new_user" href="XXXXXXX" New user
+            a class="kundvagn" href="XXXXXXX" Kundvagn
+        == yield
