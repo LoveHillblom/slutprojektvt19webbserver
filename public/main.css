@@ -1,0 +1,23 @@
+div#top_bar{
+    display: grid;
+    grid-template-columns: 1fr, 1fr, 1fr, 1fr 1fr;
+    margin: auto;
+    grid-template-areas: 
+    "loggain form form new vagn";
+}
+.text1{
+    grid-area: loggain;
+    background-color: red;
+}
+.formclass{
+    grid-area: form;
+    background-color: blue;
+}
+.new_user{
+    grid-area: new;
+    background-color: pink;
+}
+.kundvagn{
+    grid-area: vagn;
+    background-color: green;
+}
