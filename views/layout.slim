@@ -10,10 +10,15 @@ html lang="en"
         header
             a href="/" Webbshoppen
         div id="top_bar"
+            - if session[:username] != nil && 0
+                form action="/logout" method="POST" id="logout"
+                    article
+                        input value="logout" type="submit"
             a class="text1" Logga in
             form class="formclass" action="/inlogg_submit" method="POST"
                 input type="text" name="usr_name" placeholder="Username"
                 input type="text" name="usr_pass" placeholder="Password"
-            a class="new_user" href="XXXXXXX" New user
-            a class="kundvagn" href="XXXXXXX" Kundvagn
+                input type="Submit" Value="Submit"
+            a class="new_user" href="/reg" New user
+            a class="kundvagn" href="/kundvagn" Kundvagn
         == yield
