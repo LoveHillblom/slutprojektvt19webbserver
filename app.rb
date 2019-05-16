@@ -9,7 +9,26 @@ get('/') do
 end
 
 get('/kundvagn') do
-    slim(:skapa)
+    db = SQLite3::Database.new("db/webbshop.db") 
+    db.results_as_hash = true
+    
+
+    koka = session[:id].first["id"].to_i
+    @faen = db.execute("SELECT sum(total_price) FROM buy_item WHERE buy_id = ?", koka).first["sum(total_price)"].to_i
+    show = db.execute("SELECT product_id, number_items, total_price, name FROM buy_item WHERE buy_id = ?", koka )
+
+    slim(:kundvagn, locals:{show:show})
+end
+
+post('/kundvagn') do
+    db = SQLite3::Database.new("db/webbshop.db") 
+    db.results_as_hash = true
+
+    kamal = session[:id].first["id"].to_i
+
+    result = db.execute("DELETE FROM buy_item WHERE buy_id = ?", kamal)
+
+    redirect('/')
 end
 
 get('/reg') do
@@ -41,9 +60,8 @@ post("/inlogg_submit") do
         session[:createlogin] = "login"
         session[:username] = usr_name
 
-        nameid = db.execute("SELECT id FROM user WHERE user_name=?", session[:username])
-
-        session[:nameid] = nameid
+        session[:id] = db.execute("SELECT id FROM user WHERE user_name=?", usr_name)
+        nameid = session[:id].first["id"].to_i
         redirect("/")
     else
         redirect("/")
@@ -54,27 +72,64 @@ post('/prod1_sub') do
     db = SQLite3::Database.new("db/webbshop.db") 
     db.results_as_hash = true
     nollan = 0
-    prod1_pris = 12
-    Add_am = params["drop1"]
-    #db.execute("SELECT buy_item.product_id, user.id FROM buy_item INNER JOIN user ON buy_item.product_id = user.id")
-    #result1=db.execute("SELECT product_id FROM buy_item WHERE user.id = 1") 
-    
-    #bid = db.execute("SELECT buy_id FROM buy_item WHERE buy_id=?", nameid)
-    #bid = db.execute("SELECT buy_item.buy_id, user.id FROM buy_item INNER JOIN user ON buy_item.buy_id = user.id WHERE user.id=4")
-    db.execute("SELECT buy.usr_acct_id, user.id FROM buy INNER JOIN user ON buy.usr_acct_id = user.id")
-    db.execute("SELECT buy_item.buy_id, buy.usr_acct_id FROM buy_item INNER JOIN buy ON buy_item.buy_id = buy.usr_acct_id")
-    kok = session[:username]
+    prod = "banan"
+    add = params["drop1"]
+    kok = session[:id].first["id"].to_i
+    lonmat = db.execute("SELECT price FROM product WHERE name = ?", prod).first["price"]
+    matlon = lonmat.to_i * add.to_i
 
-    bid = db.execute("SELECT buy_id FROM buy_item WHERE user.user_name=?", kok)
+    dome = db.execute("SELECT id FROM product WHERE name = ?", prod).first["id"]
+    nagn = db.execute("INSERT INTO buy_item (buy_id, product_id, number_items, total_price, name) VALUES (?, ?, ?, ?, ?)", kok, dome, add, matlon, prod)
 
-    tot_pris = db.execute("SELECT total_price FROM buy_item WHERE buy_id=?", nameid)
+    redirect('/kundvagn')
+end
+post('/prod2_sub') do
+    db = SQLite3::Database.new("db/webbshop.db") 
+    db.results_as_hash = true
+    nollan = 0
+    prod = "sten"
+    add = params["drop2"]
+    kok = session[:id].first["id"].to_i
+    lonmat = db.execute("SELECT price FROM product WHERE name = ?", prod).first["price"]
 
-    blabla = db.execute("INSERT INTO buy_item (buy_id, product_id, number_items) VALUES (?, ?, ?)", [bid, 1, Add_am])
-    if tot_pris == nil 
-        db.execute("INSERT INTO buy_item (total_price) VALUES (?)", [nollan])    
-    else
-        db.execute("UPDATE buy_item SET total_price (?) WHERE buy_id=?",[tot_pris + prod1_pris, nameid])
-    end
+    matlon = lonmat.to_i * add.to_i
+
+    dome = db.execute("SELECT id FROM product WHERE name = ?", prod).first["id"]
+    nagn = db.execute("INSERT INTO buy_item (buy_id, product_id, number_items, total_price, name) VALUES (?, ?, ?, ?, ?)", kok, dome, add, matlon, prod)
+
+    redirect('/kundvagn')
+end
+post('/prod3_sub') do
+    db = SQLite3::Database.new("db/webbshop.db") 
+    db.results_as_hash = true
+    nollan = 0
+    prod = "bord"
+    add = params["drop3"]
+    kok = session[:id].first["id"].to_i
+    lonmat = db.execute("SELECT price FROM product WHERE name = ?", prod).first["price"]
+
+    matlon = lonmat.to_i * add.to_i
+
+    dome = db.execute("SELECT id FROM product WHERE name = ?", prod).first["id"]
+    nagn = db.execute("INSERT INTO buy_item (buy_id, product_id, number_items, total_price, name) VALUES (?, ?, ?, ?, ?)", kok, dome, add, matlon, prod)
+
+    redirect('/kundvagn')
+end
+post('/prod4_sub') do
+    db = SQLite3::Database.new("db/webbshop.db") 
+    db.results_as_hash = true
+    nollan = 0
+    prod = "dator"
+    add = params["drop4"]
+    kok = session[:id].first["id"].to_i
+    lonmat = db.execute("SELECT price FROM product WHERE name = ?", prod).first["price"]
+
+    matlon = lonmat.to_i * add.to_i
+
+    dome = db.execute("SELECT id FROM product WHERE name = ?", prod).first["id"]
+    nagn = db.execute("INSERT INTO buy_item (buy_id, product_id, number_items, total_price, name) VALUES (?, ?, ?, ?, ?)", kok, dome, add, matlon, prod)
+
+    redirect('/kundvagn')
 end
 
 post("/logout") do
