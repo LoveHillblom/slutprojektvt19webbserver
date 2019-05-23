@@ -3,7 +3,7 @@ h1 KUNDVAGN
 -show.each do |x|
     div #{x["name"]} * #{x["number_items"]} equates to #{x["total_price"]}
 
-div #{@faen}
+div #{@tot_pris}
 
 
 
@@ -14,5 +14,8 @@ div #{@faen}
 
 
 form action="/kundvagn" method="POST"
-    input type="Submit" Value="Buy" 
-    
+    input type="Submit" Value="Buy"
+     
+h4 Fler produkter?
+form action="/" method="POST"
+    input type="Submit" Value="Back"
